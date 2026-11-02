@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><script type='text/javascript' nonce='QBg6EYAXwrEjid8qL/NL9w==' src='https://contribution.usercontent.google.com/6hJDaYoJZyr2xpdr6NqadD5fIil8eWeM6Wjs0Jtkr1V2hcpteQ1nNcgwmabwa4DmPvxr8mEm3FXqC7QD9kacanMX-IL_fm30nM7l9vzbKSJG7AiVAmy46WtMdjumOR1JD4lnrK5SAL35NfzqHp98NoTaWD6tOmYhaURgpffE2OAUlt76R9jpbZZhMyQ6tf9oSoNwt00I-_0M7aSBqn-wHS8HPXwL2J3AHloNZKJY9OmYba153s841J60PTEx70mLjI65GbuOAlGwmGgCFcW0-_xfMHvPiVUBsQ3SYk5pSmoc1NC0cNkMx1oMxkWvnAz9ayoUFNXWv1SHzD2QzWy7o7QJVA7RSRyfZlKjFTzqKDNVXdRKPdwFoqnfgLX7zW1qNjj3xjl9Cfm4F3IEnaYlb22dQqqdS6QpgYFWob_G2v5CdomYy2pNMYvdlHXzHVfc19ZkiHMGwDif5FtVLIPua-e-u9xPJXD_V4Kn9HY5-LrQ9U7hIJjaEudBBNAqo714VHebDoPjspLVnysj-TrJcAohhUbXvh-Y53QTt5Q8k8p4Fy48EgIIXvAd3_5JUZyOCzJFQhUsBLuw74SZoeCSp1Nr0AQ31bWXv41TKhPDl7-K3nmXUr07ZZtyMcfDjwQIV3pnYUAkDsctE-6KxP4qm1fumNYfce-2b0hSD_F1rqAeMJtRPSXcjYtuKu8AIGztmO-HhRO_HDv_9FTBXSOBAhCHIVmhUXZ0Ly1OQyPBB0ANY7gVOLw6AIV29TcGpw'></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PA-34-220T Seneca III Cruise Performance, Economics & Range Optimizer</title>
+  <style>
+    :root {
+      --bg: #0b1120;
+      --card-bg: #1e293b;
+      --card-sub-bg: #0f172a;
+      --accent: #38bdf8;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: #334155;
+      --warn: #ef4444;
+      --warn-bg: rgba(239, 68, 68, 0.15);
+      --success: #34d399;
+      --amber: #f59e0b;
+      --tas-color: #60a5fa;
+      --wind-color: #c084fc;
+      --cost-color: #f43f5e;
+      --rec-bg: rgba(56, 189, 248, 0.08);
+      --rec-border: #0284c7;
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 1.25rem;
+      display: flex;
+      justify-content: center;
+    }
+    .container {
+      max-width: 980px;
+      width: 100%;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin: 0 0 0.25rem 0;
+      color: var(--accent);
+      letter-spacing: -0.01em;
+    }
+    .subtitle {
+      color: var(--muted);
+      margin-top: 0;
+      margin-bottom: 1.25rem;
+      font-size: 0.85rem;
+    }
+    .panel {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+    .panel-header {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-top: 0;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0.5rem;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1.25rem;
+    }
+    label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 0.35rem;
+    }
+    select, input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 0.65rem 0.75rem;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      background: #0f172a;
+      color: var(--text);
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+    select:focus, input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+    .status-badge {
+      display: inline-block;
+      margin-top: 0.4rem;
+      font-size: 0.8rem;
+      color: var(--accent);
+    }
+    .wind-toggle-container {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.4rem;
+    }
+    .wind-btn {
+      flex: 1;
+      padding: 0.35rem 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      background: #0f172a;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .wind-btn.active-hw {
+      background: rgba(239, 68, 68, 0.2);
+      border-color: var(--warn);
+      color: #fca5a5;
+    }
+    .wind-btn.active-tw {
+      background: rgba(52, 211, 153, 0.2);
+      border-color: var(--success);
+      color: #86efac;
+    }
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1.25rem;
+    }
+    .kpi-card {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.85rem 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .kpi-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      margin-bottom: 0.25rem;
+    }
+    .kpi-value {
+      font-size: 1.35rem;
+      font-weight: 700;
+    }
+    .kpi-sub {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+    th, td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    th {
+      background: #162032;
+      color: var(--muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    tr:last-child td {
+      border-bottom: none;
+    }
+    .val-mp {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+    .pill-limit {
+      background: var(--warn-bg);
+      border: 1px solid var(--warn);
+      color: var(--warn);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-left: 6px;
+      text-transform: uppercase;
+    }
+    .pill-at-limit {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid var(--amber);
+      color: var(--amber);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-left: 6px;
+    }
+    .pill-optimum {
+      background: rgba(56, 189, 248, 0.2);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-left: 6px;
+    }
+    .pill-min-fuel {
+      background: rgba(52, 211, 153, 0.2);
+      border: 1px solid var(--success);
+      color: var(--success);
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 4px;
+      margin-left: 6px;
+    }
+    .alert-banner {
+      display: none;
+      background: var(--warn-bg);
+      border-left: 4px solid var(--warn);
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      font-size: 0.85rem;
+      color: #fca5a5;
+    }
+    .highlight-card {
+      background: var(--rec-bg);
+      border: 1px solid var(--rec-border);
+      border-radius: 6px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    .rec-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+    .rec-item {
+      background: var(--card-sub-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.85rem 1rem;
+    }
+    .rec-item.best-cost {
+      border-color: var(--accent);
+      box-shadow: 0 0 10px rgba(56, 189, 248, 0.15);
+    }
+    .rec-item.best-fuel {
+      border-color: var(--success);
+    }
+    .rec-item-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .rec-stats {
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: #cbd5e1;
+    }
+    .unit-input-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>PA-34-220T Cruise Performance & Economics Optimizer</h1>
+  <p class="subtitle">Power Schedule, Fuel Burn Correction, Nomogram TAS, Wind Component & Direct Trip Economics</p>
+
+  <!-- Flight Conditions Input Panel -->
+  <div class="panel">
+    <div class="panel-header">1. Flight Conditions & Active Power Selection</div>
+    <div class="form-grid">
+      <!-- Pressure Altitude -->
+      <div>
+        <label for="altSelect">Pressure Altitude</label>
+        <select id="altSelect" onchange="render()"></select>
+        <div class="status-badge" id="stdTempDisplay">Std Temp: 15°C</div>
+      </div>
+
+      <!-- Power Setting -->
+      <div>
+        <label for="powerSelect">Active Cruise Power (%)</label>
+        <select id="powerSelect" onchange="render()">
+          <option value="45">45% (Long Range Cruise)</option>
+          <option value="55">55% (Long Range Cruise)</option>
+          <option value="65" selected="">65% (Economy Cruise)</option>
+          <option value="75">75% (High Speed Cruise)</option>
+        </select>
+        <div class="status-badge" style="color: var(--muted)">Max MP Limit: 34.0" Hg</div>
+      </div>
+
+      <!-- Actual OAT -->
+      <div>
+        <label for="oatInput">Actual OAT (°C)</label>
+        <input type="number" id="oatInput" value="-5" step="1" oninput="render()">
+        <div class="status-badge" id="deltaTempDisplay">ΔISA: 0°C</div>
+      </div>
+
+      <!-- Wind Component -->
+      <div>
+        <label for="windInput">Wind Component (KT)</label>
+        <input type="number" id="windInput" value="0" min="0" max="150" step="1" oninput="render()">
+        <div class="wind-toggle-container">
+          <button type="button" id="btnHw" class="wind-btn active-hw" onclick="setWindType(&#39;head&#39;)">Headwind (-)</button>
+          <button type="button" id="btnTw" class="wind-btn" onclick="setWindType(&#39;tail&#39;)">Tailwind (+)</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Selection Performance Readouts -->
+    <div class="kpi-row">
+      <!-- Groundspeed & TAS -->
+      <div class="kpi-card">
+        <span class="kpi-title">Active Airspeed / GS</span>
+        <span class="kpi-value" id="gsDisplay" style="color: var(--tas-color);">-- KT GS</span>
+        <span class="kpi-sub" id="tasSub">TAS: -- KTAS</span>
+      </div>
+
+      <!-- Fuel Flow Total -->
+      <div class="kpi-card">
+        <span class="kpi-title">Corrected Fuel Burn</span>
+        <span class="kpi-value" id="gphDisplay" style="color: var(--success);">-- GPH</span>
+        <span class="kpi-sub" id="fuelCorrectionSub">±0.0 GPH (±1 GPH / 6°C ΔISA)</span>
+      </div>
+
+      <!-- Fuel Per NM -->
+      <div class="kpi-card">
+        <span class="kpi-title">Fuel Per Nautical Mile</span>
+        <span class="kpi-value" id="fuelPerNmDisplay" style="color: var(--wind-color);">-- Gal/NM</span>
+        <span class="kpi-sub" id="nmPerGalSub">Specific Range: -- NM/Gal</span>
+      </div>
+
+      <!-- Density Altitude -->
+      <div class="kpi-card">
+        <span class="kpi-title">Density Altitude</span>
+        <span class="kpi-value" id="daDisplay" style="color: #cbd5e1;">-- FT</span>
+        <span class="kpi-sub" id="activeCostPerNmDisplay">Trip Cost: -- / NM</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cost / Operating Expense Inputs -->
+  <div class="panel">
+    <div class="panel-header">2. Cost & Operating Expense Parameters (Optional)</div>
+    <div class="form-grid">
+      <!-- Currency selector -->
+      <div>
+        <label for="currencySelect">Currency</label>
+        <select id="currencySelect" onchange="render()">
+          <option value="Skr" selected="">Skr (SEK)</option>
+          <option value="€">€ (EUR)</option>
+          <option value="$">$ (USD)</option>
+          <option value="£">£ (GBP)</option>
+        </select>
+        <div class="status-badge" style="color: var(--muted)">Applied to hourly & fuel rates</div>
+      </div>
+
+      <!-- Airframe / Operating cost per hour -->
+      <div>
+        <label for="hourlyCostInput">Airframe / Fixed Cost per Hour</label>
+        <input type="number" id="hourlyCostInput" value="0" min="0" step="50" placeholder="e.g. 1500 or 150" oninput="render()">
+        <div class="status-badge" style="color: var(--muted)">Engine reserve, maintenance, rental</div>
+      </div>
+
+      <!-- Fuel Unit Selector -->
+      <div>
+        <label for="fuelUnitSelect">Fuel Volume Unit</label>
+        <select id="fuelUnitSelect" onchange="render()">
+          <option value="USG">US Gallon (USG)</option>
+          <option value="Lt" selected="">Liter (Lt)</option>
+        </select>
+        <div class="status-badge" style="color: var(--muted)">1 USG = 3.7854 Liters</div>
+      </div>
+
+      <!-- Fuel price per unit -->
+      <div>
+        <label for="fuelPriceInput">Fuel Price (per Unit)</label>
+        <input type="number" id="fuelPriceInput" value="0" min="0" step="0.5" placeholder="e.g. 30 Skr/Lt or $6.50/gal" oninput="render()">
+        <div class="status-badge" id="effectiveGalPriceDisplay">Fuel: 0.00 / USG</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Optimum Speed & Performance Recommendations Panel -->
+  <div class="panel">
+    <div class="panel-header">3. Recommended Cruise Settings & Economy Comparison</div>
+
+    <div class="highlight-card">
+      <div style="font-weight: 700; font-size: 0.95rem; margin-bottom: 0.4rem; color: var(--accent);">
+        Summary Recommendations at Selected Conditions:
+      </div>
+      <div style="font-size: 0.9rem; line-height: 1.6;">
+        <div><strong>1. Lowest Fuel Burn per NM:</strong> <span id="recLowestFuelText">--</span></div>
+        <div style="margin-top: 0.25rem;"><strong>2. Optimum Economic Speed:</strong> <span id="recOptimumSpeedText">Enter hourly cost and fuel price above to calculate minimum total cost per NM.</span></div>
+      </div>
+    </div>
+
+    <!-- 3 Cruise Setting Comparison Cards -->
+    <div class="rec-grid" id="economyCardsContainer">
+      <!-- Populated via render() -->
+    </div>
+  </div>
+
+  <!-- Table Manifold Pressure Limit Warning -->
+  <div id="warningBanner" class="alert-banner">
+    <strong>Warning:</strong> One or more manifold pressure settings exceed the <strong>34.0" Hg MAX MAN PRESS</strong> cruise limit.
+  </div>
+
+  <!-- Manifold Pressure & RPM Table for Selected Power -->
+  <div class="panel" style="padding: 0; overflow-x: auto;">
+    <div style="padding: 0.75rem 1rem; font-weight: 700; font-size: 0.85rem; color: var(--muted); border-bottom: 1px solid var(--border); text-transform: uppercase;">
+      Approved RPM & Manifold Pressure Matrix (Active % Power)
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Engine RPM</th>
+          <th>Table Man Press (in. Hg)</th>
+          <th>Operational Status</th>
+        </tr>
+      </thead>
+      <tbody id="tableBody"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+// Data from PA34-220T Power Settings.xlsx
+const tableData = [{"alt": "SL", "alt_num": 0, "std_temp": 15, "powers": {"45": {"2100": 27.1, "2200": 26.4, "2300": 25.5, "2400": 24.3, "2500": 23.3, "2600": 22.5}, "55": {"2100": 31.2, "2200": 30.3, "2300": 29.4, "2400": 28.2, "2500": 27.2, "2600": 26.3}, "65": {"2400": 33.8, "2500": 32.9, "2600": 31.0}, "75": {"2500": 34.0, "2600": 33.0}}}, {"alt": "2000", "alt_num": 2000, "std_temp": 11, "powers": {"45": {"2100": 26.4, "2200": 25.8, "2300": 24.6, "2400": 23.7, "2500": 22.8, "2600": 22.1}, "55": {"2100": 30.5, "2200": 29.7, "2300": 29.8, "2400": 27.8, "2500": 26.8, "2600": 26.0}, "65": {"2400": 33.2, "2500": 31.7, "2600": 30.7}, "75": {"2500": 33.8, "2600": 32.7}}}, {"alt": "2500", "alt_num": 2500, "std_temp": 10, "powers": {"45": {"2100": 26.2, "2200": 25.6, "2300": 24.5, "2400": 23.6, "2500": 22.7, "2600": 22.0}, "55": {"2100": 30.4, "2200": 29.6, "2300": 29.4, "2400": 27.7, "2500": 26.7, "2600": 25.9}, "65": {"2400": 33.1, "2500": 31.6, "2600": 30.6}, "75": {"2500": 33.8, "2600": 32.6}}}, {"alt": "3000", "alt_num": 3000, "std_temp": 9, "powers": {"45": {"2100": 26.1, "2200": 25.4, "2300": 24.3, "2400": 23.4, "2500": 22.6, "2600": 22.0}, "55": {"2100": 30.2, "2200": 29.4, "2300": 29.1, "2400": 27.6, "2500": 26.6, "2600": 25.8}, "65": {"2400": 33.0, "2500": 31.6, "2600": 30.6}, "75": {"2500": 33.7, "2600": 32.5}}}, {"alt": "3500", "alt_num": 3500, "std_temp": 8, "powers": {"45": {"2100": 25.9, "2200": 25.2, "2300": 24.1, "2400": 23.3, "2500": 22.4, "2600": 21.9}, "55": {"2100": 30.1, "2200": 29.3, "2300": 28.7, "2400": 27.5, "2500": 26.5, "2600": 25.7}, "65": {"2400": 32.9, "2500": 31.6, "2600": 30.6}, "75": {"2500": 33.6, "2600": 32.5}}}, {"alt": "4000", "alt_num": 4000, "std_temp": 7, "powers": {"45": {"2100": 25.8, "2200": 25.0, "2300": 24.0, "2400": 23.2, "2500": 22.3, "2600": 21.8}, "55": {"2100": 30.0, "2200": 29.2, "2300": 28.3, "2400": 27.4, "2500": 26.4, "2600": 25.6}, "65": {"2400": 32.8, "2500": 31.5, "2600": 30.5}, "75": {"2500": 33.6, "2600": 32.4}}}, {"alt": "4500", "alt_num": 4500, "std_temp": 6, "powers": {"45": {"2100": 25.7, "2200": 24.9, "2300": 23.9, "2400": 23.1, "2500": 22.2, "2600": 21.7}, "55": {"2100": 29.9, "2200": 29.1, "2300": 28.2, "2400": 27.3, "2500": 26.3, "2600": 25.5}, "65": {"2400": 32.7, "2500": 31.4, "2600": 30.4}, "75": {"2500": 33.5, "2600": 32.4}}}, {"alt": "5000", "alt_num": 5000, "std_temp": 5, "powers": {"45": {"2100": 25.6, "2200": 24.8, "2300": 23.8, "2400": 23.0, "2500": 22.1, "2600": 21.6}, "55": {"2100": 29.9, "2200": 29.0, "2300": 28.1, "2400": 27.2, "2500": 26.3, "2600": 25.5}, "65": {"2400": 32.6, "2500": 31.4, "2600": 30.4}, "75": {"2500": 33.5, "2600": 32.3}}}, {"alt": "5500", "alt_num": 5500, "std_temp": 4, "powers": {"45": {"2100": 25.4, "2200": 24.6, "2300": 23.6, "2400": 22.9, "2500": 22.0, "2600": 21.6}, "55": {"2100": 29.8, "2200": 28.9, "2300": 28.1, "2400": 27.1, "2500": 26.2, "2600": 25.4}, "65": {"2400": 32.6, "2500": 31.3, "2600": 30.4}, "75": {"2500": 33.5, "2600": 32.2}}}, {"alt": "6000", "alt_num": 6000, "std_temp": 3, "powers": {"45": {"2100": 25.3, "2200": 24.5, "2300": 23.5, "2400": 22.8, "2500": 21.9, "2600": 21.5}, "55": {"2100": 29.7, "2200": 28.8, "2300": 28.0, "2400": 27.0, "2500": 26.2, "2600": 25.3}, "65": {"2400": 32.5, "2500": 31.2, "2600": 30.3}, "75": {"2500": 33.4, "2600": 32.2}}}, {"alt": "6500", "alt_num": 6500, "std_temp": 2, "powers": {"45": {"2100": 25.2, "2200": 24.4, "2300": 23.4, "2400": 22.7, "2500": 21.8, "2600": 21.4}, "55": {"2100": 29.6, "2200": 28.7, "2300": 27.9, "2400": 26.9, "2500": 26.1, "2600": 25.2}, "65": {"2400": 32.5, "2500": 31.1, "2600": 30.2}, "75": {"2500": 33.3, "2600": 32.2}}}, {"alt": "7000", "alt_num": 7000, "std_temp": 1, "powers": {"45": {"2100": 25.1, "2200": 24.2, "2300": 23.2, "2400": 22.6, "2500": 21.8, "2600": 21.4}, "55": {"2100": 29.5, "2200": 28.6, "2300": 27.9, "2400": 26.9, "2500": 25.9, "2600": 25.1}, "65": {"2400": 32.4, "2500": 31.1, "2600": 30.2}, "75": {"2500": 33.2, "2600": 32.1}}}, {"alt": "7500", "alt_num": 7500, "std_temp": 0, "powers": {"45": {"2100": 24.9, "2200": 24.1, "2300": 23.1, "2400": 22.5, "2500": 21.7, "2600": 21.3}, "55": {"2100": 29.5, "2200": 28.5, "2300": 27.8, "2400": 26.9, "2500": 25.8, "2600": 25.1}, "65": {"2400": 32.3, "2500": 31.1, "2600": 30.2}, "75": {"2500": 33.2, "2600": 32.0}}}, {"alt": "8000", "alt_num": 8000, "std_temp": -1, "powers": {"45": {"2100": 24.8, "2200": 24.0, "2300": 23.0, "2400": 22.4, "2500": 21.6, "2600": 21.2}, "55": {"2100": 29.4, "2200": 28.4, "2300": 27.7, "2400": 26.8, "2500": 25.7, "2600": 25.0}, "65": {"2400": 32.3, "2500": 31.0, "2600": 30.1}, "75": {"2500": 33.1, "2600": 32.0}}}, {"alt": "8500", "alt_num": 8500, "std_temp": -2, "powers": {"45": {"2100": 24.7, "2200": 23.9, "2300": 22.9, "2400": 22.3, "2500": 21.6, "2600": 21.1}, "55": {"2200": 28.4, "2300": 27.6, "2400": 26.7, "2500": 25.6, "2600": 24.9}, "65": {"2400": 32.2, "2500": 31.0, "2600": 30.1}, "75": {"2500": 33.1, "2600": 32.0}}}, {"alt": "9000", "alt_num": 9000, "std_temp": -3, "powers": {"45": {"2100": 24.6, "2200": 23.9, "2300": 22.9, "2400": 22.2, "2500": 21.5, "2600": 21.1}, "55": {"2200": 28.4, "2300": 27.6, "2400": 26.6, "2500": 25.6, "2600": 24.9}, "65": {"2400": 32.1, "2500": 30.9, "2600": 30.1}, "75": {"2500": 33.0, "2600": 31.9}}}, {"alt": "9500", "alt_num": 9500, "std_temp": -4, "powers": {"45": {"2100": 24.5, "2200": 23.8, "2300": 22.9, "2400": 22.1, "2500": 21.4, "2600": 21.1}, "55": {"2200": 28.3, "2300": 27.6, "2400": 26.6, "2500": 25.6, "2600": 24.8}, "65": {"2400": 32.1, "2500": 30.9, "2600": 30.0}, "75": {"2500": 33.0, "2600": 31.9}}}, {"alt": "10000", "alt_num": 10000, "std_temp": -5, "powers": {"45": {"2100": 24.4, "2200": 23.7, "2300": 22.8, "2400": 22.0, "2500": 21.4, "2600": 21.0}, "55": {"2200": 28.3, "2300": 27.5, "2400": 26.5, "2500": 25.5, "2600": 24.7}, "65": {"2400": 32.0, "2500": 30.9, "2600": 30.0}, "75": {"2500": 33.0, "2600": 31.9}}}, {"alt": "10500", "alt_num": 10500, "std_temp": -6, "powers": {"45": {"2100": 24.3, "2200": 23.6, "2300": 22.7, "2400": 21.9, "2500": 21.3, "2600": 21.0}, "55": {"2200": 28.3, "2300": 27.4, "2400": 26.4, "2500": 25.4, "2600": 24.7}, "65": {"2400": 31.9, "2500": 30.8, "2600": 29.9}, "75": {"2500": 32.9, "2600": 31.9}}}, {"alt": "11000", "alt_num": 11000, "std_temp": -7, "powers": {"45": {"2100": 24.2, "2200": 23.5, "2300": 22.6, "2400": 21.9, "2500": 21.3, "2600": 20.9}, "55": {"2200": 28.3, "2300": 27.4, "2400": 26.4, "2500": 25.4, "2600": 24.6}, "65": {"2400": 31.9, "2500": 30.8, "2600": 29.9}, "75": {"2500": 32.8, "2600": 31.9}}}, {"alt": "11500", "alt_num": 11500, "std_temp": -8, "powers": {"45": {"2100": 24.1, "2200": 23.4, "2300": 22.6, "2400": 21.8, "2500": 21.2, "2600": 20.9}, "55": {"2200": 28.3, "2300": 27.3, "2400": 26.4, "2500": 25.4, "2600": 24.6}, "65": {"2400": 31.9, "2500": 30.8, "2600": 29.9}, "75": {"2500": 32.6, "2600": 31.8}}}, {"alt": "12000", "alt_num": 12000, "std_temp": -9, "powers": {"45": {"2100": 24.0, "2200": 23.3, "2300": 22.5, "2400": 21.7, "2500": 21.2, "2600": 20.9}, "55": {"2200": 28.3, "2300": 27.2, "2400": 26.3, "2500": 25.3, "2600": 24.6}, "65": {"2400": 31.8, "2500": 30.7, "2600": 29.8}, "75": {"2500": 32.5, "2600": 31.8}}}, {"alt": "12500", "alt_num": 12500, "std_temp": -10, "powers": {"45": {"2200": 23.2, "2300": 22.4, "2400": 21.6, "2500": 21.2, "2600": 20.9}, "55": {"2300": 27.2, "2400": 26.2, "2500": 25.3, "2600": 24.6}, "65": {"2500": 30.6, "2600": 29.8}, "75": {"2600": 31.8}}}, {"alt": "13000", "alt_num": 13000, "std_temp": -11, "powers": {"45": {"2200": 23.1, "2300": 22.3, "2400": 21.5, "2500": 21.1, "2600": 20.9}, "55": {"2300": 27.1, "2400": 26.2, "2500": 25.2, "2600": 24.5}, "65": {"2500": 30.6, "2600": 29.8}, "75": {"2600": 31.8}}}, {"alt": "13500", "alt_num": 13500, "std_temp": -12, "powers": {"45": {"2200": 23.1, "2300": 22.2, "2400": 21.5, "2500": 21.1, "2600": 20.8}, "55": {"2300": 27.1, "2400": 26.2, "2500": 25.2, "2600": 24.4}, "65": {"2500": 30.6, "2600": 29.7}, "75": {"2600": 31.7}}}, {"alt": "14000", "alt_num": 14000, "std_temp": -13, "powers": {"45": {"2200": 23.0, "2300": 22.1, "2400": 21.4, "2500": 21.1, "2600": 20.8}, "55": {"2300": 27.1, "2400": 26.1, "2500": 25.2, "2600": 24.4}, "65": {"2500": 30.5, "2600": 29.7}, "75": {"2600": 31.7}}}, {"alt": "14500", "alt_num": 14500, "std_temp": -14, "powers": {"45": {"2300": 22.1, "2400": 21.4, "2500": 21.1, "2600": 20.8}, "55": {"2400": 26.1, "2500": 25.1, "2600": 24.4}, "65": {"2500": 30.5, "2600": 29.6}, "75": {"2600": 31.7}}}, {"alt": "15000", "alt_num": 15000, "std_temp": -15, "powers": {"45": {"2300": 22.1, "2400": 21.4, "2500": 21.1, "2600": 20.7}, "55": {"2400": 26.0, "2500": 25.1, "2600": 24.4}, "65": {"2500": 30.4, "2600": 29.6}, "75": {"2600": 31.6}}}, {"alt": "15500", "alt_num": 15500, "std_temp": -16, "powers": {"45": {"2300": 22.0, "2400": 21.3, "2500": 21.0, "2600": 20.7}, "55": {"2400": 25.9, "2500": 25.1, "2600": 24.3}, "65": {"2500": 30.4, "2600": 29.6}, "75": {"2600": 31.6}}}, {"alt": "16000", "alt_num": 16000, "std_temp": -17, "powers": {"45": {"2300": 22.0, "2400": 21.3, "2500": 21.0, "2600": 20.6}, "55": {"2400": 25.9, "2500": 25.0, "2600": 24.3}, "65": {"2500": 30.4, "2600": 29.5}, "75": {"2600": 31.6}}}, {"alt": "16500", "alt_num": 16500, "std_temp": -18, "powers": {"45": {"2400": 21.3, "2500": 21.0, "2600": 20.6}, "55": {"2500": 25.0, "2600": 24.3}, "65": {"2600": 29.5}, "75": {}}}, {"alt": "17000", "alt_num": 17000, "std_temp": -19, "powers": {"45": {"2400": 21.2, "2500": 20.9, "2600": 20.6}, "55": {"2500": 25.0, "2600": 24.2}, "65": {"2600": 29.4}, "75": {}}}, {"alt": "17500", "alt_num": 17500, "std_temp": -20, "powers": {"45": {"2400": 21.2, "2500": 20.9, "2600": 20.5}, "55": {"2500": 25.0, "2600": 24.2}, "65": {"2600": 29.4}, "75": {}}}, {"alt": "18000", "alt_num": 18000, "std_temp": -21, "powers": {"45": {"2400": 21.2, "2500": 20.9, "2600": 20.5}, "55": {"2500": 25.0, "2600": 24.2}, "65": {"2600": 29.4}, "75": {}}}, {"alt": "19000", "alt_num": 19000, "std_temp": -23, "powers": {"45": {"2400": 21.2, "2500": 20.9, "2600": 20.4}, "55": {"2600": 24.2}, "65": {"2600": 29.4}, "75": {}}}, {"alt": "20000", "alt_num": 20000, "std_temp": -25, "powers": {"45": {"2400": 21.2, "2500": 20.8, "2600": 20.4}, "55": {"2600": 24.2}, "65": {"2600": 29.3}, "75": {}}}, {"alt": "21000", "alt_num": 21000, "std_temp": -26, "powers": {"45": {"2600": 20.4}, "55": {"2600": 24.1}, "65": {}, "75": {}}}, {"alt": "22000", "alt_num": 22000, "std_temp": -28, "powers": {"45": {"2600": 20.4}, "55": {"2600": 24.1}, "65": {}, "75": {}}}, {"alt": "23000", "alt_num": 23000, "std_temp": -30, "powers": {"45": {"2600": 20.4}, "55": {}, "65": {}, "75": {}}}, {"alt": "24000", "alt_num": 24000, "std_temp": -33, "powers": {"45": {"2600": 20.4}, "55": {}, "65": {}, "75": {}}}, {"alt": "25000", "alt_num": 25000, "std_temp": -34, "powers": {"45": {"2600": 20.4}, "55": {}, "65": {}, "75": {}}}];
+
+const baseFuelBurn = {
+  "45": 16.0,
+  "55": 18.7,
+  "65": 23.3,
+  "75": 29.0
+};
+
+let currentWindType = 'head'; // 'head' or 'tail'
+
+function setWindType(type) {
+  currentWindType = type;
+  const btnHw = document.getElementById('btnHw');
+  const btnTw = document.getElementById('btnTw');
+  if (type === 'head') {
+    btnHw.className = 'wind-btn active-hw';
+    btnTw.className = 'wind-btn';
+  } else {
+    btnHw.className = 'wind-btn';
+    btnTw.className = 'wind-btn active-tw';
+  }
+  render();
+}
+
+function calcTasFromNomogram(pressAltFt, oatC, powerPct) {
+  const stdTemp = 15 - 0.0019812 * pressAltFt;
+  const deltaIsa = oatC - stdTemp;
+  const densityAlt = pressAltFt + 118.8 * deltaIsa;
+
+  const baseTasAtSl = {
+    45: 133.0,
+    55: 144.0,
+    65: 159.0,
+    75: 166.0
+  };
+
+  const baseTas = baseTasAtSl[powerPct];
+  let calculatedTas = baseTas + (densityAlt / 1000.0) * 1.72;
+
+  const maxCruiseAlt = { 45: 25000, 55: 24000, 65: 20000, 75: 16000 };
+  if (pressAltFt > maxCruiseAlt[powerPct]) {
+    return null;
+  }
+
+  return {
+    tas: Math.round(calculatedTas),
+    da: Math.round(densityAlt)
+  };
+}
+
+const altSelect = document.getElementById('altSelect');
+tableData.forEach((row, index) => {
+  const opt = document.createElement('option');
+  opt.value = index;
+  opt.textContent = row.alt === 'SL' ? 'Sea Level (SL)' : `${parseInt(row.alt).toLocaleString()} FT`;
+  if (row.alt === '10000') opt.selected = true;
+  altSelect.appendChild(opt);
+});
+
+function render() {
+  const selectedIndex = parseInt(altSelect.value);
+  const selectedAltRow = tableData[selectedIndex];
+  const power = document.getElementById('powerSelect').value;
+  const oatInput = document.getElementById('oatInput');
+  const actualTemp = oatInput.value === '' ? selectedAltRow.std_temp : parseFloat(oatInput.value);
+
+  const stdTemp = selectedAltRow.std_temp;
+  const deltaIsa = actualTemp - stdTemp;
+
+  document.getElementById('stdTempDisplay').textContent = `Std Temp: ${stdTemp > 0 ? '+' : ''}${stdTemp}°C`;
+  document.getElementById('deltaTempDisplay').textContent = `ΔISA: ${deltaIsa > 0 ? '+' : ''}${deltaIsa.toFixed(1)}°C`;
+
+  // Fuel correction: 1 GPH per 6 deg C
+  const fuelCorrDelta = (deltaIsa / 6.0) * 1.0;
+
+  // Cost inputs
+  const currency = document.getElementById('currencySelect').value;
+  const hourlyCost = parseFloat(document.getElementById('hourlyCostInput').value) || 0;
+  const fuelUnit = document.getElementById('fuelUnitSelect').value;
+  const fuelUnitPrice = parseFloat(document.getElementById('fuelPriceInput').value) || 0;
+
+  // Convert fuel price to per US Gallon
+  // 1 US Gallon = 3.78541 Liters
+  const fuelPricePerGal = fuelUnit === 'Lt' ? (fuelUnitPrice * 3.78541178) : fuelUnitPrice;
+  document.getElementById('effectiveGalPriceDisplay').textContent = `Fuel: ${currency} ${fuelPricePerGal.toFixed(2)} / USG`;
+
+  // Wind calculation
+  const windInputVal = parseFloat(document.getElementById('windInput').value) || 0;
+  const windComponent = currentWindType === 'head' ? -Math.abs(windInputVal) : Math.abs(windInputVal);
+
+  // Active Power Setting performance
+  const activeBaseBurn = baseFuelBurn[power];
+  const activeCorrectedBurn = activeBaseBurn + fuelCorrDelta;
+  document.getElementById('gphDisplay').textContent = `${activeCorrectedBurn.toFixed(1)} GPH`;
+  document.getElementById('fuelCorrectionSub').textContent = 
+    `${fuelCorrDelta >= 0 ? '+' : ''}${fuelCorrDelta.toFixed(1)} GPH (${deltaIsa >= 0 ? '+' : ''}${deltaIsa.toFixed(1)}°C ΔISA)`;
+
+  const activePerf = calcTasFromNomogram(selectedAltRow.alt_num, actualTemp, parseInt(power));
+
+  if (activePerf && activePerf.tas) {
+    const tas = activePerf.tas;
+    const gs = tas + windComponent;
+
+    document.getElementById('tasSub').textContent = `TAS: ${tas} KTAS (${currentWindType === 'head' ? '-' : '+'}${Math.abs(windInputVal)} kt wind)`;
+    document.getElementById('daDisplay').textContent = `${activePerf.da.toLocaleString()} FT`;
+
+    if (gs > 0) {
+      document.getElementById('gsDisplay').textContent = `${Math.round(gs)} KT GS`;
+      const galPerNm = activeCorrectedBurn / gs;
+      const nmPerGal = gs / activeCorrectedBurn;
+      document.getElementById('fuelPerNmDisplay').textContent = `${galPerNm.toFixed(3)} Gal/NM`;
+      document.getElementById('nmPerGalSub').textContent = `Specific Range: ${nmPerGal.toFixed(2)} NM/Gal`;
+
+      if (hourlyCost > 0 || fuelPricePerGal > 0) {
+        const totalCostPerHour = hourlyCost + (activeCorrectedBurn * fuelPricePerGal);
+        const costPerNm = totalCostPerHour / gs;
+        document.getElementById('activeCostPerNmDisplay').textContent = `Trip Cost: ${currency} ${costPerNm.toFixed(2)} / NM`;
+      } else {
+        document.getElementById('activeCostPerNmDisplay').textContent = `Trip Cost: Enter cost data`;
+      }
+    } else {
+      document.getElementById('gsDisplay').textContent = `0 KT GS`;
+      document.getElementById('fuelPerNmDisplay').textContent = `∞ (No Progress)`;
+      document.getElementById('nmPerGalSub').textContent = `Headwind ≥ TAS`;
+      document.getElementById('activeCostPerNmDisplay').textContent = `Cost: N/A (GS ≤ 0)`;
+    }
+  } else {
+    document.getElementById('gsDisplay').textContent = `N/A`;
+    document.getElementById('tasSub').textContent = `Exceeds max cruise altitude`;
+    document.getElementById('fuelPerNmDisplay').textContent = `-- Gal/NM`;
+    document.getElementById('nmPerGalSub').textContent = `--`;
+    document.getElementById('daDisplay').textContent = `-- FT`;
+    document.getElementById('activeCostPerNmDisplay').textContent = `Trip Cost: --`;
+  }
+
+  // Evaluate All Available Power Settings for Recommendations (45%, 55%, 65%, 75%)
+  const powerCandidates = [45, 55, 65, 75];
+  let evaluatedSettings = [];
+
+  powerCandidates.forEach(p => {
+    // Check if this altitude has table data
+    const rpmOptions = selectedAltRow.powers[String(p)] || {};
+    const rpmKeys = Object.keys(rpmOptions);
+    const perf = calcTasFromNomogram(selectedAltRow.alt_num, actualTemp, p);
+
+    if (rpmKeys.length > 0 && perf && perf.tas) {
+      const gph = baseFuelBurn[String(p)] + fuelCorrDelta;
+      const tas = perf.tas;
+      const gs = tas + windComponent;
+      if (gs > 0) {
+        const galPerNm = gph / gs;
+        const nmPerGal = gs / gph;
+        const totalCostPerHour = hourlyCost + (gph * fuelPricePerGal);
+        const costPerNm = totalCostPerHour / gs;
+
+        // Check if all RPMs exceed 34.0
+        const minMp = Math.min(...Object.values(rpmOptions));
+        const maxMp = Math.max(...Object.values(rpmOptions));
+
+        evaluatedSettings.push({
+          power: p,
+          gph: gph,
+          tas: tas,
+          gs: gs,
+          galPerNm: galPerNm,
+          nmPerGal: nmPerGal,
+          costPerHour: totalCostPerHour,
+          costPerNm: costPerNm,
+          rpmOptions: rpmOptions,
+          minMp: minMp,
+          maxMp: maxMp
+        });
+      }
+    }
+  });
+
+  // Find lowest fuel burn per NM
+  let bestFuelSetting = null;
+  if (evaluatedSettings.length > 0) {
+    bestFuelSetting = evaluatedSettings.reduce((prev, curr) => (curr.galPerNm < prev.galPerNm ? curr : prev));
+  }
+
+  // Find optimum economic speed (lowest cost per NM) if cost entered
+  const hasCostInfo = (hourlyCost > 0 || fuelPricePerGal > 0);
+  let bestCostSetting = null;
+  if (hasCostInfo && evaluatedSettings.length > 0) {
+    bestCostSetting = evaluatedSettings.reduce((prev, curr) => (curr.costPerNm < prev.costPerNm ? curr : prev));
+  }
+
+  // Update Summary Recommendations
+  const recLowestFuelSpan = document.getElementById('recLowestFuelText');
+  if (bestFuelSetting) {
+    recLowestFuelSpan.innerHTML = `<strong>${bestFuelSetting.power}% Power</strong> yielding <strong>${bestFuelSetting.galPerNm.toFixed(3)} Gal/NM</strong> (${bestFuelSetting.nmPerGal.toFixed(2)} NM/Gal) at <strong>${Math.round(bestFuelSetting.gs)} KT GS</strong> (${bestFuelSetting.tas} KTAS) burning <strong>${bestFuelSetting.gph.toFixed(1)} GPH</strong>.`;
+  } else {
+    recLowestFuelSpan.textContent = `No approved cruise settings available at this altitude/wind.`;
+  }
+
+  const recOptimumSpeedSpan = document.getElementById('recOptimumSpeedText');
+  if (hasCostInfo && bestCostSetting) {
+    recOptimumSpeedSpan.innerHTML = `<strong>${bestCostSetting.power}% Power</strong> yields the lowest trip cost of <strong>${currency} ${bestCostSetting.costPerNm.toFixed(2)} per NM</strong> at <strong>${Math.round(bestCostSetting.gs)} KT GS</strong> (Total operating rate: ${currency} ${Math.round(bestCostSetting.costPerHour)}/hr).`;
+  } else {
+    recOptimumSpeedSpan.innerHTML = `<em>Enter hourly rate and/or fuel price above to compute cost-optimized cruise speed.</em>`;
+  }
+
+  // Display the 3 Standard Economy / Cruise Settings comparison (55% Long Range, 65% Economy, 75% High Speed)
+  const economyProfiles = [
+    { power: 55, name: "Long Range Cruise (55%)" },
+    { power: 65, name: "Normal Economy Cruise (65%)" },
+    { power: 75, name: "High Speed Cruise (75%)" }
+  ];
+
+  const cardsContainer = document.getElementById('economyCardsContainer');
+  cardsContainer.innerHTML = '';
+
+  economyProfiles.forEach(prof => {
+    const itemData = evaluatedSettings.find(s => s.power === prof.power);
+    const card = document.createElement('div');
+    const isBestFuel = bestFuelSetting && bestFuelSetting.power === prof.power;
+    const isBestCost = hasCostInfo && bestCostSetting && bestCostSetting.power === prof.power;
+
+    let cardClasses = 'rec-item';
+    if (isBestCost) cardClasses += ' best-cost';
+    else if (isBestFuel) cardClasses += ' best-fuel';
+
+    card.className = cardClasses;
+
+    if (!itemData) {
+      card.innerHTML = `
+        <div class="rec-item-title">
+          <span>${prof.name}</span>
+          <span style="color: var(--muted); font-size: 0.75rem;">Not Available</span>
+        </div>
+        <div class="rec-stats" style="color: var(--muted);">
+          Setting exceeds critical altitude or no approved table MP at this flight level.
+        </div>
+      `;
+    } else {
+      let badges = '';
+      if (isBestCost) badges += `<span class="pill-optimum">OPTIMUM COST</span>`;
+      if (isBestFuel) badges += `<span class="pill-min-fuel">LOWEST BURN/NM</span>`;
+
+      let costLine = '';
+      if (hasCostInfo) {
+        costLine = `<div>• <strong>Trip Cost:</strong> <span style="color: ${isBestCost ? 'var(--accent)' : '#cbd5e1'}; font-weight: 700;">${currency} ${itemData.costPerNm.toFixed(2)} / NM</span> (${currency} ${Math.round(itemData.costPerHour)}/hr)</div>`;
+      }
+
+      card.innerHTML = `
+        <div class="rec-item-title">
+          <span><strong>${prof.name}</strong></span>
+          <div>${badges}</div>
+        </div>
+        <div class="rec-stats">
+          <div>• <strong>True Airspeed (TAS):</strong> ${itemData.tas} KTAS</div>
+          <div>• <strong>Groundspeed (GS):</strong> <span style="color: var(--tas-color); font-weight: 700;">${Math.round(itemData.gs)} KT</span></div>
+          <div>• <strong>Fuel Consumption:</strong> <span style="color: var(--success); font-weight: 700;">${itemData.gph.toFixed(1)} GPH</span></div>
+          <div>• <strong>Fuel Per NM:</strong> <span style="color: var(--wind-color); font-weight: 700;">${itemData.galPerNm.toFixed(3)} Gal/NM</span> (${itemData.nmPerGal.toFixed(2)} NM/Gal)</div>
+          ${costLine}
+        </div>
+      `;
+    }
+    cardsContainer.appendChild(card);
+  });
+
+  // Table rendering for selected active power setting
+  const rpmDict = selectedAltRow.powers[power] || {};
+  const tbody = document.getElementById('tableBody');
+  tbody.innerHTML = '';
+
+  let hasExceeded = false;
+  const rpms = Object.keys(rpmDict).sort((a, b) => parseInt(a) - parseInt(b));
+
+  if (rpms.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color: var(--muted); padding: 1.5rem;">No approved power combinations available at ${selectedAltRow.alt} FT for ${power}% power.</td></tr>`;
+  } else {
+    rpms.forEach(rpm => {
+      const mp = rpmDict[rpm];
+      let statusTag = '';
+
+      if (mp > 34.0) {
+        hasExceeded = true;
+        statusTag = `<span class="pill-limit">EXCEEDS 34.0" LIMIT</span>`;
+      } else if (mp === 34.0) {
+        statusTag = `<span class="pill-at-limit">MAX LIMIT (34.0")</span>`;
+      } else {
+        statusTag = `<span style="color: var(--success); font-weight: 600;">✓ Normal</span>`;
+      }
+
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${rpm} RPM</strong></td>
+        <td><span class="val-mp" style="${mp > 34.0 ? 'color: var(--warn);' : '#e2e8f0'}">${mp.toFixed(1)}" Hg</span></td>
+        <td>${statusTag}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+
+  document.getElementById('warningBanner').style.display = hasExceeded ? 'block' : 'none';
+}
+
+window.onload = render;
+</script>
+</body>
+</html>
