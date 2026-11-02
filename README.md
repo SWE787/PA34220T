@@ -4,3 +4,5 @@ This is a small project that I created to learn. Being a professional pilot I ai
 My purpose of this small project is to create small simple tool for pilots flying the Piper Seneca III, PA-34-220T. This is an aircraft which I have flown many hours in.
 The file is in a standard html file so it can run in a web browser. The size is so small that it can run off line.
 Any feedback and suggestions is most welcome.
+
+For safety I recommend that you of course virus check this file. I use virustotal.com, which is free and uses 70 different antivirus programs at the same time.
